@@ -1,0 +1,117 @@
+Before Login:
+Username for "Sign In" - $x(".//*[@name='username' and @class='form-control form-control-sm input-dark']")
+
+Password for "Sing In" - $x(".//input[@class='form-control form-control-sm input-dark' and @name='password']")
+
+Button "Sign In" - $x(".//button[@class='btn btn-primary btn-sm']")
+
+Username for "Sign up for OurApp" - $x('.//input[@id="username-register"]')
+
+Email for for "Sign up for OurApp" - $x('.//input[@name="email"]')
+
+Password for for "Sign up for OurApp" - $x('.//input[@name="password" and @id="password-register"]')
+
+Sign up for OurApp button - $x('.//*[@type="submit"]')
+
+Complex app for testing - QA (home button) - $x('.//a[@class="text-white"]')
+
+Link "OurApp" - $x('.//a[@class="text-muted"]')
+
+Alert "Username must be at least 3 characters." for username field with less than 3 char. - $x('.//*[contains(text(),"Username must be at least 3 characters.")]')
+
+Alert "Username can only contain letters and numbers." for username field with wrong char. - $x('.//*[contains(text(),"Username can only contain letters and numbers.")]')
+
+Alert "That username is already taken." for username fieald when name is already taken - $x('.//*[contains(text(),"That username is already taken.")]')
+
+Alert "Username cannot exceed 30 characters." for username field when name contains more than 30 sym. - $x('.//*[contains(text(),"Username cannot exceed 30 characters.")]')
+
+Alert "You must provide a valid email address." for Email field - $x('.//*[contains(text(),"You must provide a valid email address.")]')
+
+Alert "Password must be at least 12 characters." for field Password when pass is less then 12 char - $x('.//*[contains(text(),"Password must be at least 12 characters.")]')
+
+Alert "Password cannot exceed 50 characters" for field Password when pass is more then 50 char - $x('.//*[contains(text(),"Password cannot exceed 50 characters")]')
+
+
+
+After Login:
+"Create Post" button - $x('.//a[@href="/create-post"]')
+
+"Sign Out" button - $x('.//button[@class="btn btn-sm btn-secondary"]')
+
+Chat button - $x('.//*[@class="svg-inline--fa fa-comment fa-w-16"]/*[@fill="currentColor"]')
+
+My Profile button - $x('.//a[@class="mr-2"]/*[@data-original-title="My Profile"]')
+
+
+
+
+
+TEST CASE # 1
+Sammery: Registration flow 
+
+STR:
+	1. Go to https://qa-complex-app-for-testing.herokuapp.com/
+	2. Type to field "Username" (on registration form) some user name (more than 2 characters and less than 30,use letters or numbers only), and make sure that this user name is not using.
+	3. Fill the "Email" field with correct email(for ex: example@mail.com), and make sure that email is not using.
+	4. Fill the "Password" field correctly(any symbols, lenght of password should be between 12 and 50 characters). 
+	5. Press on "Sign up for OurApp" button.
+AR:
+After clicking on "Sign up for OurApp" button page should updates and message "Hello {your username}, your feed is empty." and you should be signing in to the app.
+
+
+
+TEST CASE # 2
+Sammery: Validation for registration field "Username".
+
+STR:
+	1. Go to https://qa-complex-app-for-testing.herokuapp.com/
+	2. Type to field 1 or 2 symbols(letters or numbers).
+	3. Clear this field and type 3 or more symbols with secial symbol(for ex: @#$%_ ^&*).
+	4. Clear this field and type name which is already exists(for ex: 123).
+	5. Clear this field and type more than 30 symbols(letters or numbers).
+
+AR:
+
+Username should contains only letters and number, lenght should be more than 3 symbols. Arerts should appear: for 2nd step: "Username must be at least 3 characters."; for 3rd step: "Username can only contain letters and numbers." ; for 4th step: "That username is already taken."; for 5th step: "Username cannot exceed 30 characters.".
+
+
+
+TEST CASE #3
+Sammery: Validation for field "Email".
+
+STR:
+	1. Go to https://qa-complex-app-for-testing.herokuapp.com/
+	2. Type to field invalid email adress (for ex: email without "@mail.com") - try different combinations.
+
+AR:
+
+Alert "You must provide a valid email address." should appears every time when you type incorrect email (correct example - example@mail.com).
+
+
+
+TEST CASE #4
+Sammery: Validation for field "Password".
+
+STR:
+	1. Go to https://qa-complex-app-for-testing.herokuapp.com/
+	2. Type to field "Password" from 1 to 11 any symbols.
+	3. Type to field "Password" more than 50 any symbols.
+
+AR:
+
+Password should contains from 12 to 50 any symbols. Alerts should appear: for 2nd step: "Password must be at least 12 characters."; for 3rd step: "Password cannot exceed 50 characters".
+
+
+TEST CASE #5
+Sammery: Successful sign in
+
+Pre-conditions:	
+Use username and password from the first test case as correct credentials for this test case.
+
+STR:
+	1. Go to https://qa-complex-app-for-testing.herokuapp.com/
+	2. Fill fields "Username" and "Password" with correct credentials on the header of the page.
+	3. Press "Sign In" button on the header of the page.
+AR:
+
+After pressing "Sign In" button on the header of the page you should be signed in to the resource with correct user.
