@@ -277,7 +277,7 @@ class TestSuccessfulRegistrationAndSignIn(BaseTest):
 
 class TestFailedSignIn(BaseTest):
 
-    @pytest.fixture(scope='function')
+    @pytest.fixture(scope='class')
     def driver(self):
         driver = webdriver.Chrome(executable_path=r'A:\Python\QaComplexApp\drivers\chromedriver.exe')
         yield driver
@@ -376,44 +376,56 @@ class TestFailedSignIn(BaseTest):
 
 class TestPosts(BaseTest):
 
-    @pytest.fixture(scope='function')
+    @pytest.fixture(scope='class')
     def driver(self):
         driver = webdriver.Chrome(executable_path=r'A:\Python\QaComplexApp\drivers\chromedriver.exe')
         yield driver
         driver.close()
 
+    # Fixture for registration form
     @pytest.fixture(scope='function')
     def login(self, driver):
+        # Go to the start page
         driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        username = driver.find_element_by_xpath('.//input[@id="username-register"]')
-        username.clear()
-        user_name_text = ''
-        for i in range(random.randint(6, 15)):
-            user_name_text += random.choice(string.ascii_letters)
-        username.send_keys(user_name_text)
-        email = driver.find_element_by_xpath('.//input[@name="email"]')
-        email.clear()
-        email_text = ''
-        for i in range(random.randint(5, 15)):
-            email_text += random.choice(string.ascii_letters).lower()
-        email.send_keys(email_text + '@gmail.com')
-        password = driver.find_element_by_xpath('.//input[@name="password" and @id="password-register"]')
-        password.clear()
-        password_text = ''
-        for i in range(random.randint(4, 13)):
-            password_text += random.choice(string.ascii_letters)
-            password_text += random.choice(string.punctuation)
-            password_text += str(random.randint(1, 9))
-        password.send_keys(password_text)
-        sign_up_button = driver.find_element_by_xpath('.//*[contains(text(),"Sign up for OurApp")]')
-        sleep(2)
-        sign_up_button.click()
+        # Fill username field
+        driver.find_element_by_xpath('.//input[@id="username-register"]').clear()
+        driver.find_element_by_xpath('.//input[@id="username-register"]').send_keys(self.user_name_text)
+        # Fill email field
+        driver.find_element_by_xpath('.//input[@name="email"]').clear()
+        driver.find_element_by_xpath('.//input[@name="email"]').send_keys(self.email_text + '@gmail.com')
+        # Fill password field
+        driver.find_element_by_xpath('.//input[@name="password" and @id="password-register"]').clear()
+        driver.find_element_by_xpath('.//input[@name="password" and @id="password-register"]').send_keys(self.password_text)
+        sleep(1)
+        # Press register button
+        driver.find_element_by_xpath('.//*[contains(text(),"Sign up for OurApp")]').click()
 
-    def test_create_new_post(self, driver, login):
+    @pytest.fixture(scope="function")
+    def logout(self, driver):
+        yield
+        driver.find_element_by_xpath(".//button[contains(text(), 'Sign Out')]").click()
+        sleep(1)
 
+    # Sign In fixture
+    @pytest.fixture(scope="function")
+    def sing_in(self, driver):
+        # Go to start page
+        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
+        # Fill username field
+        driver.find_element_by_xpath(".//*[@name='username' and @class='form-control form-control-sm input-dark']").clear()
+        driver.find_element_by_xpath(".//*[@name='username' and @class='form-control form-control-sm input-dark']").send_keys(
+            self.user_name_text)
+        # Fill password field
+        driver.find_element_by_xpath(".//input[@class='form-control form-control-sm input-dark' and @name='password']").clear()
+        driver.find_element_by_xpath(".//input[@class='form-control form-control-sm input-dark' and @name='password']").send_keys(
+            self.password_text)
+        # Press "Sign In" button
+        driver.find_element_by_xpath(".//button[@class='btn btn-primary btn-sm']").click()
+
+    def test_create_new_post(self, driver, login, logout):
         """
-        Pre-condition:
-        1. Finish registration flow and enter to the main page with registered user.
+        Pre-condition(released in fixtures):
+        1. Finish registration flow and enter to the main page with registered user (fixture - login).
 
         STR:
         1. Click on "Create Post" button
@@ -442,44 +454,78 @@ class TestPosts(BaseTest):
         # 4. Click on "Save New Post" button.
         save_new_post_button = driver.find_element_by_xpath('.//*[contains(text(), "Save New Post")]')
         save_new_post_button.click()
+        sleep(1)
         success_message = driver.find_element_by_xpath('.//*[contains(text(), "New post successfully created.")]')
         assert success_message.text == 'New post successfully created.'
         self.log.info('Saving a post.')
 
-    def test_editing_post(self, driver, login):
-
+    def test_editing_post(self, driver, sing_in, logout):
         """
-        Pre-condition:
-        1. Finish registration flow and enter to the main page with registered user.
+        Pre-condition(released in fixtures):
+        1. Finish registration flow and enter to the main page with registered user (fixture - login).
 
         STR:
         1. Create a new post.
         2. Edit created post.
+        3. Verify changes
         """
 
         # 1. Create a new post.
-        create_post_button = driver.find_element_by_xpath('.//*[@href="/create-post"]')
-        create_post_button.click()
-        title = driver.find_element_by_xpath('.//*[@class="form-control form-control-lg form-control-title"]')
-        title.clear()
-        title.send_keys('Hell')
-        body_content = driver.find_element_by_xpath('.//*[@class="body-content tall-textarea form-control"]')
-        body_content.clear()
-        body_content.send_keys('Test message!')
-        save_new_post_button = driver.find_element_by_xpath('.//*[contains(text(), "Save New Post")]')
-        save_new_post_button.click()
+        driver.find_element_by_xpath('.//*[@href="/create-post"]').click()
+        # Fill "Title"
+        driver.find_element_by_xpath('.//*[@class="form-control form-control-lg form-control-title"]').clear()
+        driver.find_element_by_xpath('.//*[@class="form-control form-control-lg form-control-title"]').send_keys('Hell')
+        # Fill "Body Context"
+        driver.find_element_by_xpath('.//*[@class="body-content tall-textarea form-control"]').clear()
+        driver.find_element_by_xpath('.//*[@class="body-content tall-textarea form-control"]').send_keys('Test message!')
+        # Save post
+        driver.find_element_by_xpath('.//*[contains(text(), "Save New Post")]').click()
         sleep(1)
         self.log.info('Creating a post.')
 
         # 2. Edit created post.
-        edit_button = driver.find_element_by_xpath(".//*[@class='text-primary mr-2']")
-        edit_button.click()
-        title = driver.find_element_by_xpath('.//*[@value="Hell"]')
-        title.send_keys('o')
-        body_content = driver.find_element_by_xpath(".//textarea[@id='post-body']")
-        body_content.send_keys(' Text was edit!')
+        # Click "Edit" button
+        driver.find_element_by_xpath(".//*[@class='text-primary mr-2']").click()
+        # Change "Title"
+        driver.find_element_by_xpath('.//*[@value="Hell"]').send_keys('o')
+        # Change "Body Context"
+        driver.find_element_by_xpath(".//textarea[@id='post-body']").send_keys(' Text was edit!')
+        # Press "Save" button
         save_updates_button = driver.find_element_by_xpath('.//*[contains(text(), "Save Updates")]')
         save_updates_button.click()
-        updated_message = driver.find_element_by_xpath('.//*[contains(text(), "Post successfully updated.")]')
-        assert updated_message.text == 'Post successfully updated.'
+        sleep(1)
+
+        # 3. Verify changes
+        assert driver.find_element_by_xpath('.//*[contains(text(), "Post successfully updated.")]').text == 'Post successfully updated.'
         self.log.info('Post was edited.')
+
+    def test_delete_a_new_post(self, driver, sing_in, logout):
+        """
+        Pre-conditions(released in fixtures):
+            1. Go to start page.
+            2. Signin to the resource.
+        STR:
+            1. Create a new post.
+            2. Delete created post.
+            3. Verify changes.
+        """
+        # 1. Create a new post.
+        driver.find_element_by_xpath('.//*[@href="/create-post"]').click()
+        # Fill "Title"
+        driver.find_element_by_xpath('.//*[@class="form-control form-control-lg form-control-title"]').clear()
+        driver.find_element_by_xpath('.//*[@class="form-control form-control-lg form-control-title"]').send_keys('Hell')
+        # Fill "Body Context"
+        driver.find_element_by_xpath('.//*[@class="body-content tall-textarea form-control"]').clear()
+        driver.find_element_by_xpath('.//*[@class="body-content tall-textarea form-control"]').send_keys('Test message!')
+        # Save post
+        driver.find_element_by_xpath('.//*[contains(text(), "Save New Post")]').click()
+        sleep(1)
+        self.log.info('Creating a post.')
+
+        # 2. Delete created post.
+        driver.find_element_by_xpath('.//*[@class="delete-post-button text-danger"]').click()
+        self.log.info('Post was deleted.')
+
+        # 3. Verify changes.
+        assert driver.find_element_by_xpath('.//*[contains(text(), "Post successfully deleted")]').text == 'Post successfully deleted'
+        self.log.info('Verify delete message.')
