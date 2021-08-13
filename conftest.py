@@ -12,10 +12,10 @@ class BaseTest:
     log = logging.getLogger(__name__)
     variety = random.choice(range(100000, 999999))
     user_name_text = ''
-    for i in range(random.randint(6, 15)):
+    for i in range(random.randint(4, 6)):
         user_name_text += random.choice(string.ascii_letters)
     email_text = ''
-    for i in range(random.randint(5, 15)):
+    for i in range(random.randint(5, 20)):
         email_text += random.choice(string.ascii_letters).lower()
     password_text = ''
     for i in range(random.randint(4, 13)):
