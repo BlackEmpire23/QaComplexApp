@@ -1,3 +1,5 @@
+import random
+import string
 from time import sleep
 
 
@@ -19,4 +21,24 @@ class BaseHelpers:
         return self.driver.find_element_by_xpath(f".//{element_tag}[contains(text(), '{text}')]")
 
     def verify_message(self, xpath, text):
+        """
+        Verification by text
+        """
         assert self.driver.find_element_by_xpath(xpath).text == text
+
+    def user_data(self):
+        """
+        Valid data for user credentials
+        """
+        username_text = ''
+        for i in range(random.randint(4, 6)):
+            username_text += random.choice(string.ascii_letters)
+        email_text = ''
+        for i in range(random.randint(5, 20)):
+            email_text += random.choice(string.ascii_letters).lower()
+        password_text = ''
+        for i in range(random.randint(4, 13)):
+            password_text += random.choice(string.ascii_letters)
+            password_text += random.choice(string.punctuation)
+            password_text += str(random.randint(1, 9))
+        return username_text, email_text, password_text
