@@ -1,5 +1,4 @@
 import logging
-from time import sleep
 
 from selenium.webdriver.common.by import By
 
@@ -19,8 +18,7 @@ class ProfileHelpers(BaseHelpers):
         self.log = logging.getLogger(__name__)
 
     def logout(self):
-        self.driver.find_element_by_xpath(ProfilePage.SIGN_OUT_BUTTON_XPATH).click()
-        sleep(1)
+        self.wait_and_click(locator_type=By.XPATH, locator=ProfilePage.SIGN_OUT_BUTTON_XPATH)
 
     def create_new_post(self, title, body):
         """
@@ -29,7 +27,7 @@ class ProfileHelpers(BaseHelpers):
         base_helper = BaseHelpers(self.driver)
 
         # 1. Click on "Create Post" button
-        self.driver.find_element_by_xpath(ProfilePage.CREATE_POST_BUTTON_XPATH).click()
+        self.wait_and_click(locator_type=By.XPATH, locator=ProfilePage.CREATE_POST_BUTTON_XPATH)
         self.log.info('Clicking on "Create Post" button.')
 
         # 2. Fill "Title" field with any text.
@@ -41,7 +39,7 @@ class ProfileHelpers(BaseHelpers):
         self.log.info('Filled "Body content".')
 
         # 4. Click on "Save New Post" button.
-        self.driver.find_element_by_xpath(ProfilePage.POST_SAVE_BUTTON_XPATH).click()
+        self.wait_and_click(locator_type=By.XPATH, locator=ProfilePage.POST_SAVE_BUTTON_XPATH)
         self.log.info('Creating a post.')
 
     def sign_in(self, username='', password=''):
@@ -54,4 +52,4 @@ class ProfileHelpers(BaseHelpers):
         self.log.info(f'Type password: "{password}"')
 
         # 4. Press "Sign In" button
-        self.driver.find_element_by_xpath(LoginPageConstants.SIGN_IN_BUTTON_XPATH).click()
+        self.wait_and_click(locator_type=By.XPATH, locator=LoginPageConstants.SIGN_IN_BUTTON_XPATH)
