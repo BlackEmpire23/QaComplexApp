@@ -1,4 +1,4 @@
-class ProfilePage:
+class ProfilePageConstants:
     """Store constants related to Profile page"""
     # Hello message
     HELLO_MESSAGE_TEXT = 'Hello {lower_username}, your feed is empty.'

@@ -1,6 +1,12 @@
 import logging
 import random
-import string
+
+import pytest
+from selenium import webdriver
+
+from constans.base import BaseConstans
+from pages.login_page import LoginPage
+from pages.profile_page import ProfilePage
 
 
 def pytest_runtest_setup(item):
@@ -12,13 +18,22 @@ class BaseTest:
     log = logging.getLogger(__name__)
     variety = random.choice(range(100000, 999999))
     user_name_text = ''
-    for i in range(random.randint(4, 6)):
-        user_name_text += random.choice(string.ascii_letters)
-    email_text = ''
-    for i in range(random.randint(5, 20)):
-        email_text += random.choice(string.ascii_letters).lower()
-    password_text = ''
-    for i in range(random.randint(4, 13)):
-        password_text += random.choice(string.ascii_letters)
-        password_text += random.choice(string.punctuation)
-        password_text += str(random.randint(1, 9))
+
+
+@pytest.fixture(scope="class")
+def driver():
+    driver = webdriver.Chrome(executable_path=BaseConstans.DRIVER_PATH)
+    yield driver
+    driver.close()
+
+
+@pytest.fixture(scope="function")
+def start_page(driver):
+    driver.get(BaseConstans.START_PAGE_URL)
+    return LoginPage(driver)
+
+
+@pytest.fixture(scope="function")
+def logout(driver):
+    yield
+    ProfilePage(driver).logout()
