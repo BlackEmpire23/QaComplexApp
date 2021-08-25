@@ -1,8 +1,8 @@
-class ProfilePage:
+class ProfilePageConstants:
     """Store constants related to Profile page"""
     # Hello message
     HELLO_MESSAGE_TEXT = 'Hello {lower_username}, your feed is empty.'
-    HELLO_MESSAGE_XPATH = './/div[@class="text-center"]//h2'
+    HELLO_MESSAGE_XPATH = './/h2'
     HELLO_MESSAGE_USERNAME_XPATH = ".//strong"
 
     # Sign out
@@ -17,7 +17,7 @@ class ProfilePage:
     POST_SUCCESS_MESSAGE_XPATH = './html/body/div[2]/div'
     POST_SUCCESS_MESSAGE_TEXT = 'New post successfully created.'
     POST_DELETE_BUTTON_XPATH = './/*[@class="delete-post-button text-danger"]'
-    POST_EDIT_BUTTON_XPATH = ".//*[@class='text-primary mr-2']"
+    POST_EDIT_BUTTON_XPATH = ".//*[@data-original-title='Edit']"
     POST_SUCCESSFULLY_UPDATED_TEXT = 'Post successfully updated.'
     POST_SUCCESSFULLY_DELETED_TEXT = 'Post successfully deleted'
 
