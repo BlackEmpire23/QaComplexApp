@@ -1,7 +1,5 @@
 class LoginPageConstants:
-    """
-    Store constants related to Login Page
-    """
+    """Store constants related to Login Page"""
 
     # Sign Up
     SIGN_UP_USERNAME_XPATH = './/input[@id="username-register"]'
@@ -25,4 +23,3 @@ class LoginPageConstants:
     ALERT_PASSWORD_MAX_LENGTH_TEXT = "Password cannot exceed 50 characters"
     SIGN_UP_ALERT_XPATH = './/*[@class="alert alert-danger small liveValidateMessage liveValidateMessage--visible"]'
     SIGN_IN_ALERT_XPATH = './/html/body/div[2]/div[1]'
-

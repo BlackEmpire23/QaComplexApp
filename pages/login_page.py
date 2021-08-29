@@ -49,27 +49,25 @@ class LoginPage(BaseHelpers):
         """ Click Sign Up button and verify the result"""
         # Press register button
         self.wait_and_click(locator_type=By.XPATH, locator=self.constants.SIGN_UP_BUTTON_XPATH)
-        self.log.info('Logged In')
+        self.log.info('Pressing on Sign Up button')
 
         # 3. Verify result.
         assert self.driver.find_element(by=By.XPATH, value=ProfilePageConstants.SIGN_OUT_BUTTON_XPATH)
+        self.log.info('Registration is successful')
 
     def registration(self, username='', email='', password=''):
         """Helper for login to resource by registration for a new user with valid data"""
         # Go to the start page
         self.driver.get(BaseConstans.START_PAGE_URL)
 
-        # Helper for fill fields
-        base_helper = BaseHelpers(self.driver)
-
         # Fill username field
-        base_helper.fill_input_field(by=By.XPATH, locator=self.constants.SIGN_UP_USERNAME_XPATH, value=username)
+        self.fill_input_field(by=By.XPATH, locator=self.constants.SIGN_UP_USERNAME_XPATH, value=username)
 
         # Fill email field
-        base_helper.fill_input_field(by=By.XPATH, locator=self.constants.SIGN_UP_EMAIL_XPATH, value=email + '@gmail.com')
+        self.fill_input_field(by=By.XPATH, locator=self.constants.SIGN_UP_EMAIL_XPATH, value=email + '@gmail.com')
 
         # Fill password field
-        base_helper.fill_input_field(by=By.XPATH, locator=self.constants.SIGN_UP_PASSWORD_XPATH, value=password)
+        self.fill_input_field(by=By.XPATH, locator=self.constants.SIGN_UP_PASSWORD_XPATH, value=password)
         self.log.info('Filled required fields')
 
         # Press register button
