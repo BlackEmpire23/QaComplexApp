@@ -1,5 +1,4 @@
 import logging
-from time import sleep
 
 from selenium.webdriver.common.by import By
 
@@ -35,9 +34,7 @@ class ProfilePage(BaseHelpers):
         self.log.info("CLicked on search button")
 
         # Type text to search field
-        self.wait_until_element_find(locator_type=By.XPATH, locator=self.constants.SEARCH_INPUT_FIELD_XPATH)
-        sleep(1)
-        self.fill_input_field(by=By.XPATH, locator=self.constants.SEARCH_INPUT_FIELD_XPATH, value=username)
+        self.wait_and_send_keys(locator_type=By.XPATH, locator=self.constants.SEARCH_INPUT_FIELD_XPATH, text=username)
         self.log.info("Typed text to search")
 
     def verify_search(self, username):
