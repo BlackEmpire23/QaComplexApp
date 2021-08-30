@@ -17,7 +17,6 @@ def pytest_runtest_setup(item):
 class BaseTest:
     log = logging.getLogger(__name__)
     variety = random.choice(range(100000, 999999))
-    user_name_text = ''
 
 
 @pytest.fixture(scope="class")

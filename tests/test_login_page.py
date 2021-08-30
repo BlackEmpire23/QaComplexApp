@@ -151,7 +151,7 @@ class TestLoginPage(BaseTest):
         profile_page.logout()
 
         # 3. Sign In.
-        start_page.sign_in(username=username, password=password)
+        profile_page = start_page.sign_in(username=username, password=password)
 
         # 4. Verify result.
         profile_page.verify_message(xpath=ProfilePageConstants.HELLO_MESSAGE_XPATH, text=ProfilePageConstants.HELLO_MESSAGE_TEXT.format(
