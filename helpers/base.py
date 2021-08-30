@@ -23,6 +23,11 @@ class BaseHelpers:
         self.wait.until(EC.element_to_be_clickable((locator_type, locator)))
         self.driver.find_element(by=locator_type, value=locator).click()
 
+    def wait_and_send_keys(self, locator_type, locator, text):
+        """Wait until element clickable and click"""
+        self.wait.until(EC.visibility_of_element_located((locator_type, locator)))
+        self.driver.find_element(by=locator_type, value=locator).send_keys(text)
+
     def fill_input_field(self, by, locator, value=''):
         """ Find required element using by.X model, clear input field and enter the value """
         field = self.wait_until_element_find(locator_type=by, locator=locator)
